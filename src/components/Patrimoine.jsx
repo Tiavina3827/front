@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
-import Possession from '../../models/possessions/Possession.js';  // Assure-toi que le chemin est correct
-import PatrimoineClass from '../../models/Patrimoine.js'; // Assure-toi que le chemin est correct
+import Possession from '../../models/possessions/Possession.js';
+import PatrimoineClass from '../../models/Patrimoine.js';
 
 import '../bootstrap-5.0.2-dist/css/bootstrap.min.css';
 
@@ -14,6 +14,7 @@ function Patrimoine() {
     const [endDate, setEndDate] = useState('');
     const [chartData, setChartData] = useState({ datasets: [] });
     const [patrimoineValue, setPatrimoineValue] = useState(null);
+    const [specificDate, setSpecificDate] = useState('');
 
     useEffect(() => {
         fetch('https://back-api1.onrender.com/possessions')
@@ -46,7 +47,6 @@ function Patrimoine() {
         const patrimoine = new PatrimoineClass('John Doe', possessions);
 
         const values = dateRange.map(date => patrimoine.getValeur(date));
-
         const labels = dateRange.map(date => date.toLocaleDateString());
 
         setChartData({
@@ -74,19 +74,27 @@ function Patrimoine() {
         }
     };
 
+    const handleSpecificDateChange = (e) => {
+        setSpecificDate(e.target.value);
+
+        if (specificDate) {
+            const specificDateObj = new Date(specificDate);
+            const possessions = data.map(p => new Possession(p.possesseur, p.libelle, p.valeur, new Date(p.dateDebut), p.dateFin ? new Date(p.dateFin) : null, p.tauxAmortissement));
+            const patrimoine = new PatrimoineClass('John Doe', possessions);
+            const valueAtSpecificDate = patrimoine.getValeur(specificDateObj);
+
+            setPatrimoineValue(valueAtSpecificDate);
+        }
+    };
+
     return (
         <div className="container mt-5">
             <h1 className="text-center mb-4">Patrimoine de John Doe</h1>
             <div className="mb-4">
                 <Line data={chartData} />
             </div>
-            {patrimoineValue !== null && (
-                <div className="text-center">
-                    <h2>Valeur du patrimoine au {new Date(endDate).toLocaleDateString()} :</h2>
-                    <p>{patrimoineValue}</p>
-                </div>
-            )}
-            <div className="text-center mt-4">
+            <div className="text-center mb-4">
+
                 <div className="d-flex justify-content-center mb-3">
                     <div className="me-3">
                         <label htmlFor="start-date" className="form-label">Date de début :</label>
@@ -110,6 +118,26 @@ function Patrimoine() {
                     </div>
                 </div>
                 <button onClick={handleCheckValue} className="btn btn-primary">Valider</button>
+            </div>
+            <div className="text-center mt-4">
+                <div className="d-flex justify-content-center mb-3">
+                    <div>
+                        <label htmlFor="specific-date" className="form-label">Date spécifique :</label>
+                        <input
+                            type="date"
+                            id="specific-date"
+                            className="form-control"
+                            value={specificDate}
+                            onChange={handleSpecificDateChange}
+                        />
+                        {patrimoineValue !== null && (
+                            <div>
+                                <h2>Valeur du patrimoine au {new Date(specificDate).toLocaleDateString()} :</h2>
+                                <h3>{patrimoineValue} Ar</h3>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );
