@@ -4,7 +4,7 @@ function LandingPage(){
     return(
         <>
         <div className="container2">
-            <h1>Gérer votre patrimoine avec plus de faciliter avec: </h1>
+            <h1>Gérer votre patrimoine avec plus de facilité avec: </h1>
             <div className="possessionPres">
                 <p>Une lise des possessions et leurs gestions intégrer</p>
                 <Link to="/Possession" className="PossessionBtn">Possession's list</Link>
