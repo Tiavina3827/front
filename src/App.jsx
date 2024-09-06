@@ -9,10 +9,10 @@ function App() {
         <>
             <BrowserRouter>
                 <NavBar/>
-                <LandingPage/>
                 <Routes>
                     <Route path="/patrimoine" element={<Patrimoine/>}/>
                     <Route path="/possession" element={<Possessions/>}/>
+                    <Route path="/" element={<LandingPage/>}/>
                 </Routes>
             </BrowserRouter>
         </>
