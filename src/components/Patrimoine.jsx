@@ -3,6 +3,7 @@ import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
 import Possession from '../../models/possessions/Possession.js';
 import PatrimoineClass from '../../models/Patrimoine.js';
+import '../root.css'
 
 import '../bootstrap-5.0.2-dist/css/bootstrap.min.css';
 
