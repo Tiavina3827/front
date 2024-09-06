@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
-import '../root.css'
+import Possession from '../../models/possessions/Possession.js';  // Assure-toi que le chemin est correct
+import PatrimoineClass from '../../models/Patrimoine.js'; // Assure-toi que le chemin est correct
+
+import '../bootstrap-5.0.2-dist/css/bootstrap.min.css';
+
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement);
 
 function Patrimoine() {
@@ -19,7 +23,6 @@ function Patrimoine() {
     }, []);
 
     useEffect(() => {
-        // Afficher le graphique avec une période par défaut de 30 jours
         const today = new Date();
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(today.getDate() - 30);
@@ -39,14 +42,10 @@ function Patrimoine() {
             dateRange.push(new Date(date));
         }
 
-        const values = dateRange.map(date => {
-            const possessionsOnDate = data.filter(possession =>
-                (!possession.dateDebut || new Date(possession.dateDebut) <= date) &&
-                (!possession.dateFin || new Date(possession.dateFin) >= date)
-            );
+        const possessions = data.map(p => new Possession(p.possesseur, p.libelle, p.valeur, new Date(p.dateDebut), p.dateFin ? new Date(p.dateFin) : null, p.tauxAmortissement));
+        const patrimoine = new PatrimoineClass('John Doe', possessions);
 
-            return possessionsOnDate.reduce((total, possession) => total + parseFloat(possession.valeur), 0);
-        });
+        const values = dateRange.map(date => patrimoine.getValeur(date));
 
         const labels = dateRange.map(date => date.toLocaleDateString());
 
@@ -76,39 +75,41 @@ function Patrimoine() {
     };
 
     return (
-        <div style={{ position: 'relative', minHeight: '100vh', paddingBottom: '100px' }}>
-            <h1 style={{textAlign: 'center',padding:'4%'}}>Patrimoine de John Doe</h1>
-            <div style={{ width: '80%', margin: '0 auto' }}>
+        <div className="container mt-5">
+            <h1 className="text-center mb-4">Patrimoine de John Doe</h1>
+            <div className="mb-4">
                 <Line data={chartData} />
             </div>
             {patrimoineValue !== null && (
-                <div style={{ marginTop: '20px',marginLeft: '30%' }}>
+                <div className="text-center">
                     <h2>Valeur du patrimoine au {new Date(endDate).toLocaleDateString()} :</h2>
-                    <p style={{marginLeft:"20%"}}>{patrimoineValue} </p>
+                    <p>{patrimoineValue}</p>
                 </div>
             )}
-            <div style={{  bottom: '20px', width: '80%', margin: '0 auto', textAlign: 'center' }}>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' , flexDirection:"column",alignItems:"center",left:"40%"}}>
-                    <div>
-                        <label htmlFor="start-date">Date de début :</label>
+            <div className="text-center mt-4">
+                <div className="d-flex justify-content-center mb-3">
+                    <div className="me-3">
+                        <label htmlFor="start-date" className="form-label">Date de début :</label>
                         <input
                             type="date"
                             id="start-date"
+                            className="form-control"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                         />
                     </div>
                     <div>
-                        <label htmlFor="end-date">Date de fin :</label>
+                        <label htmlFor="end-date" className="form-label">Date de fin :</label>
                         <input
                             type="date"
                             id="end-date"
+                            className="form-control"
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
                         />
                     </div>
-                    <button onClick={handleCheckValue} id="ValidBtn">Valider</button>
                 </div>
+                <button onClick={handleCheckValue} className="btn btn-primary">Valider</button>
             </div>
         </div>
     );
