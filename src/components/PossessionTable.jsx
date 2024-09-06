@@ -76,6 +76,7 @@ function PossessionsTable({
                                 value={formData.libelle}
                                 onChange={handleFormChange}
                                 required
+                                readOnly={modalMode === 'update'}
                             />
                         </Form.Group>
                         <Form.Group controlId="formValeur">
