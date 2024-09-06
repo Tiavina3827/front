@@ -41,7 +41,7 @@ function PossessionsTable({
                         <td>{possession.dateFin ? new Date(possession.dateFin).toLocaleDateString() : 'N/A'}</td>
                         <td>{possession.tauxAmortissement}%</td>
                         <td>{possession.jour || 'N/A'}</td>
-                        <td>{possession.valeurConstante ? possession.valeurConstante.toLocaleString() : 'N/A'} XOF</td>
+                        <td>{possession.valeurConstante ? possession.valeurConstante.toLocaleString() : 'N/A'} Ar</td>
                         <td>
                             <Button variant="warning" onClick={() => handleShowModal('update', possession)}>Modifier</Button>
                             <Button variant="secondary" onClick={() => handleClosePossession(possession.libelle)} className="ml-2">Clôturer</Button>
