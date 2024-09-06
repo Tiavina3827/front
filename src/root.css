@@ -1,0 +1,38 @@
+
+
+
+@font-face {
+    font-family: "Quicksand";
+    src: url('Quicksand-VariableFont_wght.ttf');
+}
+body{
+    font-family: 'Quicksand'!important;
+}
+.navLinks{
+    color: black;
+    text-decoration: none;
+}
+.navLinks:hover{
+    transition: 1s ease;
+    font-weight: bold;
+    color: black;
+}
+nav{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30%;
+}
+#ValidBtn{
+    justify-items: center;
+    border: none;
+    background: #D4ADFC;
+    padding: 2%;
+    border-radius: 10px;
+}
+#ValidBtn:hover {
+    transition: 1s ease;
+    background: #5C469C;
+    font-weight: bold;
+}
