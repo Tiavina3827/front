@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PossessionsTable from './PossessionTable';
 import { Container, Spinner, Alert } from 'react-bootstrap';
 import '../bootstrap-5.0.2-dist/css/bootstrap.min.css'
@@ -60,31 +60,26 @@ function Possessions() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (modalMode === 'create') {
-            fetch('https://back-api1.onrender.com/possession/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            })
-                .then(response => response.json())
-                .then(newPossession => {
-                    setPossessions([...possessions, newPossession]);
-                    handleCloseModal();
-                })
-                .catch(error => console.error('Erreur:', error));
-        } else if (modalMode === 'update') {
-            fetch(`https://back-api1.onrender.com/possession/${selectedPossession.libelle}/update`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            })
-                .then(response => response.json())
-                .then(updatedPossession => {
+        const url = modalMode === 'create'
+            ? 'https://back-api1.onrender.com/possession/create'
+            : `https://back-api1.onrender.com/possession/${selectedPossession.libelle}/update`;
+        const method = modalMode === 'create' ? 'POST' : 'PUT';
+
+        fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        })
+            .then(response => response.json())
+            .then(updatedPossession => {
+                if (modalMode === 'create') {
+                    setPossessions([...possessions, updatedPossession]);
+                } else {
                     setPossessions(possessions.map(p => p.libelle === updatedPossession.libelle ? updatedPossession : p));
-                    handleCloseModal();
-                })
-                .catch(error => console.error('Erreur:', error));
-        }
+                }
+                handleCloseModal();
+            })
+            .catch(error => console.error('Erreur:', error));
     };
 
     const handleClosePossession = (libelle) => {
