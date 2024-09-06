@@ -36,7 +36,7 @@ function PossessionsTable({
                     <tr key={index}>
                         <td>{possession.possesseur.nom}</td>
                         <td>{possession.libelle}</td>
-                        <td>{possession.valeur.toLocaleString()} XOF</td>
+                        <td>{possession.valeur.toLocaleString()} Ar</td>
                         <td>{possession.dateDebut ? new Date(possession.dateDebut).toLocaleDateString() : 'N/A'}</td>
                         <td>{possession.dateFin ? new Date(possession.dateFin).toLocaleDateString() : 'N/A'}</td>
                         <td>{possession.tauxAmortissement}%</td>
